@@ -1,26 +1,45 @@
+function demo(vidname, outfolder)
 
+run('/lustre/cvit/vijay/Himangi/voc-dpm/startup.m');
 
-startup;
+load('/lustre/cvit/vijay/Himangi/voc-dpm/INRIA/inriaperson_final');
 
-load('INRIA/inriaperson_final');
 model.vis = @() visualizemodel(model, ...
     1:2:length(model.rules{model.start}));
-vidname = '/home/himangi/COURSES/HONOURS2/out-8.ogv';
 
 
-obj = VideoReader(vidname);
-nframes = obj.NumberOfFrames;
+[a, videostring ,videoext] = fileparts(vidname);
+scratch_dir = ['/scratch/frames/' videostring];
+
+
+if ~exist(scratch_dir)
+	system(['mkdir /scratch/frames/']);
+	system(['mkdir ' scratch_dir]);
+end
+
+
+istring = ['/global/ffmpeg/bin/ffmpeg -i ' vidname ' -s 1280x716 -qscale:v 2 ' scratch_dir '/%06d.jpg']
+system(istring);
+
+imgs = dir(fullfile(scratch_dir, '*.jpg'));
+imgs
 cls = model.class;
 
+
+fp_d = fopen([outfolder videostring '.txt'], 'a');
+
 % load and display image
-for k = 71 : nframes
-    im = read(obj, k);
+for k = 1 : length(imgs)
+
+    imgpath = [scratch_dir '/' imgs(k).name]
+
+    im = imread(imgpath);
     
     % detect objects
-    tic;
-    [ds, bs] = imgdetect(im, model, -0.5);
-    toc;
+    [ds, bs] = imgdetect(im, model, -1);
+
     top = nms(ds, 0.5);
+
     ds = ds(top, :);
     bs = bs(top, :);
    
@@ -28,15 +47,18 @@ for k = 71 : nframes
         bs = [ds(:,1:4) bs];
     end
     %showboxes(im, reduceboxes(model, bs));
- 
+
     if model.type == model_types.MixStar
         % get bounding boxes
         bbox = bboxpred_get(model.bboxpred, ds, reduceboxes(model, bs));
         bbox = clipboxes(im, bbox);
         top = nms(bbox, 0.5);
-        saveTo = sprintf('../bounded/image%04d.png',k);
-        showboxes(im, bbox(top,:),saveTo);
-
+        %saveTo = sprintf('../bounded/image%04d.png',k);
+        %showboxes(im, bbox(top,:),saveTo);
     end
-    fprintf('\n');
+    
+    for ib = 1:size(bbox,1)
+    	fprintf(fp_d, '%ld %f %f %f %f %f\n', k, bbox(ib,1) , bbox(ib,2), bbox(ib,3)-bbox(ib,1), bbox(ib,4)-bbox(ib,2), bbox(ib,5));
+    end
 end
+fclose(fp_d);

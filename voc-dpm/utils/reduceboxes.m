@@ -39,6 +39,7 @@ n = length(model.rules{model.start}(1).rhs);
 % n*4+2 := 4 coordinates per boxes plus the component index 
 % and score
 b = zeros(size(bs, 1), n*4+2);
+if size(bs,2) > 1
 maxc = max(bs(:,end-1));
 for i = 1:maxc
   % process boxes for component i
@@ -58,3 +59,5 @@ for i = 1:maxc
   tmp(:,del) = [];
   b(I,:) = tmp;
 end
+end
+
