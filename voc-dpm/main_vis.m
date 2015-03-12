@@ -1,0 +1,6 @@
+function main()
+writeToFile
+end
+
+
+
