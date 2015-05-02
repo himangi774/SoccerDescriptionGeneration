@@ -1,16 +1,15 @@
 %function demo(vidname, outfolder)
-function demo(vidname)
+function demo(vidname,filename)
 
 %vidname = '/lustre/cvit/vijay/DATA/SOCCER/part10.mp4';
-outfolder = '/lustre/cvit/vijay/Himangi/DPMResults/';
+outfolder = '/lustre/cvit/vijay/Himangi/DPMResults/Actions/';
 
 [a, videostring ,videoext] = fileparts(vidname);
 
-x1 = [outfolder videostring '_time.txt']
+%fileID = fopen([outfolder 'Spain_Netherlands/' videostring '_time.txt'], 'r');
+fileID = fopen(filename, 'r');
 
-fileID = fopen([outfolder videostring '_time.txt'], 'r');
-
-vidno  = 7;
+vidno  = 293;
 
 tline = fgetl(fileID);
 while ischar(tline)   
@@ -42,6 +41,9 @@ while ischar(tline)
     end
     if(strcmp(A(1), '7'))
         outPath =  [outPath 'throw/'];
+    end
+    if(strcmp(A(1), '8'))
+        outPath =  [outPath 'stand/'];
     end
 
     out_vid_name = sprintf('vid%d.mp4', vidno);

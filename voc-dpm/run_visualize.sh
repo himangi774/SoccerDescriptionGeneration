@@ -6,4 +6,4 @@
 #SBATCH -p cvit
 #SBATCH -t 120:00:00
 
-/scratch/matlab/R2013b/bin/matlab -nodesktop -nosplash -singleCompThread -r "main_vis()"
+/scratch/matlab/R2013b/bin/matlab -nodesktop -nosplash -singleCompThread -r "main_vis($1)"

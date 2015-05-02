@@ -1,4 +1,9 @@
 function demo(vidname, outfolder)
+%function demo()
+
+%vidname = '/lustre/cvit/vijay/DATA/SOCCER/part10.mp4';
+%outfolder = '/lustre/cvit/vijay/Himangi/DPMResults/';
+
 
 run('/lustre/cvit/vijay/Himangi/voc-dpm/startup.m');
 

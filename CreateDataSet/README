@@ -11,5 +11,6 @@ type_of clip:
 5 -> goalkeeper
 6 -> hand_kick
 7 -> throw(on a foul)
+8 -> stand
 
 

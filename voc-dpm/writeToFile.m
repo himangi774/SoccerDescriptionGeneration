@@ -1,6 +1,7 @@
 
+function writeToFile(vidname, detection_file_name, outvideo)
+
 % extract frames to scratch 
-vidname = '/lustre/cvit/vijay/DATA/SOCCER/part10.mp4'
 
 [a, videostring ,videoext] = fileparts(vidname);
 scratch_dir = ['/scratch/frames/' videostring];
@@ -13,12 +14,13 @@ end
 
 
 istring = ['/global/ffmpeg/bin/ffmpeg -i ' vidname ' -s 1280x716 -qscale:v 2 ' scratch_dir '/%06d.jpg']
-%system(istring);
+system(istring);
 
 img_direcName = [scratch_dir '/'];
-detection_file_name  = '/lustre/cvit/vijay/Himangi/DPMResults/part10';
+%detection_file_name  = ['/lustre/cvit/vijay/Himangi/DPMResults/Spain_Netherlands/' videostring '.txt'];
 
-writerObj = VideoWriter('/lustre/cvit/vijay/Himangi/DPMResults/part10_out.avi');
+%writerObj = VideoWriter(['/lustre/cvit/vijay/Himangi/DPMResults/Spain_Netherlands/' videostring  '_out.avi']);
+writerObj = VideoWriter(outvideo);
 writerObj.FrameRate = 25;
 open(writerObj);
 
